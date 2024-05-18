@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/16 17:51:50 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/05/18 21:00:45 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+
+# define TAKE_FORKS "has taken a fork"
+# define THINKING "is thinking"
+# define SLEEPING "is sleeping"
+# define EATING "is eating"
+# define DIED "died"
 
 typedef struct s_data
 {
@@ -53,7 +59,7 @@ int 	parsing(char **av, t_data *data);
 void	*retune(void *arg);
 time_t	get_time(void);
 void ft_usleep(long long time);
-void ft_write(t_philo *philos, int i);
+void ft_write(char *str, t_philo *philos);
 int check_die(t_philo *philos, t_data *data);
 int check_finished(t_philo *philos, t_data *data);
 
