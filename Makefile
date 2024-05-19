@@ -6,14 +6,13 @@
 #    By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/29 10:53:22 by saharchi          #+#    #+#              #
-#    Updated: 2024/05/16 11:57:45 by saharchi         ###   ########.fr        #
+#    Updated: 2024/05/19 20:28:46 by saharchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror 
-
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 SRC = main.c
