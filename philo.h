@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/19 20:36:17 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/05/20 16:03:17 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 typedef struct s_data
 {
+	int c;
 	pthread_t		t;
 	int				die;
 	pthread_mutex_t	*fork;
@@ -38,6 +39,7 @@ typedef struct s_data
 	time_t			num_meal;
 	time_t			time_to_die;
 	time_t			time_to_eat;
+	time_t			start;
 	time_t			time_to_sleep;
 	int				flag;
 	int				nphilo;
@@ -45,12 +47,13 @@ typedef struct s_data
 
 typedef struct s_philo
 {
+	int				eat;
 	int				r_fork;
 	int				l_fork;
 	int 			count;
 	pthread_t		thread;
+	time_t			new_time_to_die;
 	time_t			times_last_eat;
-	time_t			start;
 	int				id;
 	struct s_data 	*data;
 } t_philo;
