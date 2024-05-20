@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abel-hid <abel-hid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:27:54 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:27:59 by abel-hid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,24 @@ typedef struct s_data
 	pthread_mutex_t	look_die;
 	pthread_mutex_t	look_sleep;
 	pthread_mutex_t	look_write;
-	time_t			num_meal;
-	time_t			time_to_die;
-	time_t			time_to_eat;
-	time_t			start;
-	time_t			time_to_sleep;
+	long long 		num_meal;
+	long long 		time_to_die;
+	long long 		time_to_eat;
+	long long 		start;
+	long long 		time_to_sleep;
 	int				flag;
 	int				nphilo;
 } t_data;
 
 typedef struct s_philo
 {
-	time_t			times_last_eat;
+	long long 		times_last_eat;
 	int				eat;
 	int				r_fork;
 	int				l_fork;
 	int 			count;
 	pthread_t		thread;
-	time_t			new_time_to_die;
+	long long 		new_time_to_die;
 	int				id;
 	struct s_data 	*data;
 } t_philo;
@@ -61,7 +61,7 @@ typedef struct s_philo
 int		ft_atoi(const char *str);
 int 	parsing(char **av);
 void	*retune(void *arg);
-time_t	get_time(void);
+long long get_time(void);
 void ft_usleep(long long time, t_philo *philos);
 void ft_write(char *str, t_philo *philos);
 // int check_finished(t_philo *philos, t_data *data);
