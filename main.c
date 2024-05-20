@@ -20,10 +20,12 @@ int check_die(t_philo *philos, t_data *data)
 	i = 0;
 	while(i < data->nphilo)
 	{
-		if(get_time() - philos[i].times_last_eat  > data->time_to_die)
+		if(get_time() - philos[i].times_last_eat > data->time_to_die)
 		{
+			printf("here1 %ld %ld\n",  philos[i].times_last_eat, data->time_to_die);
 			return (1);
 		}
+		i++;
 	}
 	return (0);
 }
@@ -63,6 +65,7 @@ void	eat(t_philo *philos)
 	pthread_mutex_lock(&philos->data->look_eting);
 	ft_write(EATING, philos);
 	philos->times_last_eat = get_time();
+	printf("ana id %d rani hna db%ld\n",philos->id, philos->times_last_eat);
 	philos->count++;
 	philos->data->c++;
 	ft_usleep(philos->data->time_to_eat, philos);
@@ -100,45 +103,27 @@ void ft_sleep(t_philo *philos)
 void *monitoring(void *arg)
 {
 	t_philo	*philos;
-	// int i;
 	
 	philos = (t_philo *)arg;
 
 	while(!philos->data->die)
 	{
-		// i = 0;
-			pthread_mutex_lock(&philos->data->look_die);
-			// if(philos->data->die)
-			if(get_time() - philos->times_last_eat  > philos->data->time_to_die)
+	
+			int i = 0;
+			while(i < philos->data->nphilo)
 			{
-				// printf("%ld ---%ld\n",get_time()- philos->data->start , philos->data->time_to_die);
-				// printf("------%d %d %ld\n", philos->id, philos->eat, get_time() - philos->start );
-				ft_write(DIED, philos);
-				philos->data->die = 1;
-				pthread_mutex_unlock(&philos->data->look_die);
-				// pthread_mutex_destroy(philos->r_fork);
-				// pthread_mutex_destroy(philos->l_fork);
-
-				return NULL;
+				if(get_time() - philos[i].times_last_eat > philos->data->time_to_die)
+				{
+					printf(" ana :%ld\n", philos->times_last_eat);
+					printf(" ana :%ld\n", philos[i].times_last_eat);
+					ft_write(DIED, philos);
+					philos->data->die = 1;
+					pthread_mutex_unlock(&philos->data->look_die);
+					return NULL;
+				}
 			}
-			// if(philos->data->c == philos->data->nphilo)
-			// {
-			// 	philos->data->time_to_die += philos->data->time_to_die;
-				
-			// }
-			pthread_mutex_unlock(&philos->data->look_die);
-		// 	i++;
-		// }
 	}
 	return NULL;
-
-
-	//kifash blan time 
-	// moushkil ftime 
-	// yak hadshi s7i7 lihna 
-	// hadchi mkheewwwr 
-	//  time limkhawar nnnn time huwa hadak 
-	// time makay3awd itrisita
 }
 void *retune(void *arg)
 {
@@ -149,20 +134,13 @@ void *retune(void *arg)
 		usleep(100);
 	while(!philos->data->die)
 	{
-		// pthread_create(&philos->data->t, NULL, monitoring, (void *)philos);
 		take_fork(philos);
 		eat(philos);
-		// pthread_detach(philos->data->t);
 		if (philos->data->die)
 		{
 			return (NULL);
 		}
 		ft_sleep(philos);
-		// philos->eat = 0;
-		// usleep imta kat3yed liha aslan taaa kikunu maatu u chb3u mout u kat3yt liha 7ta flwl 
-		//dir lcase fin aymutu 
-		// time ma3ndu ta 3ala9aa 
-
 	}
     return NULL;
 }
@@ -179,7 +157,7 @@ void ft_usleep(long long time, t_philo *philos)
 {
 	(void)philos;
 	time_t l = get_time();
-	while(get_time() - l <= time)
+	while(get_time() - l < time)
 		usleep(100);
 		
 }
@@ -234,17 +212,20 @@ void init_philos(t_philo	*philos, t_data *data)
 		philos[i].count = 0;
 		philos[i].eat = 0;
 		philos[i].new_time_to_die = data->time_to_die;
-		philos[i].times_last_eat = 0;
+		philos[i].times_last_eat = get_time();
+		printf("id = %d\n ana :%ld\n",philos[i].id , philos[i].times_last_eat);
 		pthread_mutex_init(&(data->fork[i]), NULL);
-		pthread_create(&philos[i].thread, NULL, retune, (void*)&philos[i]);		
+		pthread_create(&philos[i].thread, NULL, retune, (void*)&philos[i]);
 		i++;
 	}
+	pthread_create(&philos->data->t, NULL, monitoring, (void *)philos);
 	i = 0;
 	while(i < data->nphilo)
 	{
-		pthread_detach(philos[i].thread);
+		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
+	pthread_detach(philos->data->t);
 }
 
 void init_data(char **av, t_data *data)
@@ -265,6 +246,7 @@ void init_data(char **av, t_data *data)
 	else
 		data->num_meal = -1;
 }
+
 int main(int ac, char **av)
 {
 
@@ -289,6 +271,13 @@ int main(int ac, char **av)
 	init_data(av, data);
 	philos = malloc(sizeof(t_philo) * data->nphilo);
 	init_philos(philos, data);
+	
+	// printf("philo %d\n", data->nphilo);
+	// // printf("philo %d\n", data->c);
+	// printf("philo %ld\n", (philos[0]).data->time_to_die);
+	// printf("philo %ld\n", (philos[0]).data->time_to_eat);
+	// printf("philo %ld\n", (philos[0]).data->time_to_sleep);
+	// printf("philo %ld\n", philos[i].times_last_eat);
 	// while(1)
 	// {
 	// 	if (check_die(philos, data))
