@@ -153,11 +153,9 @@ void *retune(void *arg)
 		ft_write(TAKE_FORKS, philos);
 		pthread_mutex_lock(&philos->data->fork[l_fork]);
 		ft_write(TAKE_FORKS, philos);
-		// printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, "has taken a fork");
 
 
 		philos->times_last_eat = get_time();
-		// printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, "is eating");
 		ft_write(EATING, philos);
 		ft_usleep(philos->data->time_to_eat, philos);
 	
@@ -165,7 +163,6 @@ void *retune(void *arg)
 		pthread_mutex_unlock(&philos->data->fork[l_fork]);
 
 
-		// printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, "is sleeping");
 		ft_write(SLEEPING, philos);
 		ft_usleep(philos->data->time_to_sleep, philos);
 		ft_write(THINKING, philos);
