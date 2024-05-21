@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/21 13:16:36 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:36:51 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ typedef struct s_data
 	pthread_t		t;
 	int				die;
 	pthread_mutex_t	*fork;
-	// pthread_mutex_t	look_eting;
-	// pthread_mutex_t	look_die;
-	// pthread_mutex_t	look_sleep;
+	pthread_mutex_t	look_eting;
+	pthread_mutex_t	look_die;
+	pthread_mutex_t	look_sleep;
 	pthread_mutex_t	look_write;
 	long long 		num_meal;
 	long long 		time_to_die;

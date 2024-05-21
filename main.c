@@ -60,13 +60,25 @@ void take_fork(t_philo *philos)
 	ft_write(TAKE_FORKS, philos);
 }
 
-void	eat(t_philo *philos)
+int	eat(t_philo *philos)
 {
+
+	take_fork(philos);
+	pthread_mutex_lock(&philos->data->look_die);
 	philos->times_last_eat = get_time();
-	ft_write(EATING, philos);
+	if(philos->data->die)
+	{
+		pthread_mutex_unlock(&philos->data->look_die);
+		pthread_mutex_unlock(&philos->data->fork[philos->r_fork]);
+		pthread_mutex_unlock(&philos->data->fork[philos->l_fork]);
+		return 1;
+	}
+	printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, EATING);
+	pthread_mutex_unlock(&philos->data->look_die);
 	ft_usleep(philos->data->time_to_eat, philos);
 	pthread_mutex_unlock(&philos->data->fork[philos->r_fork]);
 	pthread_mutex_unlock(&philos->data->fork[philos->l_fork]);
+	return 0;
 }
 
 void ft_sleep(t_philo *philos)
@@ -98,36 +110,38 @@ void *monitoring(void *arg)
 	t_philo	*philos;
 	
 	philos = (t_philo *)arg;
-	int i;
+	// int i;
 
 	while(!philos->data->die)
 	{
-	
-			i = 0;
-			while(i < philos->data->nphilo)
-			{
-				if (get_time() - philos[i].times_last_eat > philos[i].data->time_to_die)
+			// i = 0;
+			// while(i < philos->data->nphilo)
+			// {
+				// pthread_mutex_lock(&philos->data->look_eting);
+				pthread_mutex_lock(&philos->data->look_die);
+				if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 				{
-					// pthread_mutex_lock(&philos->data->look_die);
-					ft_write(DIED, &philos[i]);
+					printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, DIED);
 					philos->data->die = 1;
-					// pthread_mutex_unlock(&philos->data->look_die);
+					// pthread_mutex_unlock(&philos->data->look_eting);
 					return NULL;
 				}
-				i++;
-			}
+				pthread_mutex_unlock(&philos->data->look_die);
+				// pthread_mutex_unlock(&philos->data->look_eting);
+			// 	i++;
+			// }
 	}
 	return NULL;
 }
 
 void ft_write(char *str, t_philo *philos)
 {
-	pthread_mutex_lock(&philos->data->look_write);
+	pthread_mutex_lock(&philos->data->look_die);
 	if (!philos->data->die)
 	{
 		printf("%lld %d %s\n", get_time() - philos->data->start, philos->id, str);
 	}
-	pthread_mutex_unlock(&philos->data->look_write);
+	pthread_mutex_unlock(&philos->data->look_die);
 }
 
 void *routine(void *arg)
@@ -136,11 +150,12 @@ void *routine(void *arg)
 	
 	philos = (t_philo *)arg;
 	if (philos->id % 2 == 0)
-		usleep(50);
-	while(!philos->data->die)
+		usleep(philos->data->time_to_eat);
+	while(1)
 	{
-		take_fork(philos);
-		eat(philos);
+		// take_fork(philos);
+		if (eat(philos))
+			return NULL;
 		ft_sleep(philos);
 	}
     return NULL;
@@ -157,13 +172,15 @@ long long get_time(void)
 void ft_usleep(long long time, t_philo *philos)
 {
 	long long start;
-	// (void)philos;
+	(void)philos;
 
 	start = get_time();
 	while (get_time() - start < time)
 	{
-		if (philos->data->die)
-			return ;
+		// if (philos->data->die)
+		// {
+		// 	return ;
+		// }
 		usleep(100);
 	}
 }
@@ -225,9 +242,9 @@ void init_philos(t_philo	*philos, t_data *data)
 
 void init_data(char **av, t_data *data)
 {
-	// pthread_mutex_init(&data->look_eting, NULL);
-	// pthread_mutex_init(&data->look_die, NULL);
-	// pthread_mutex_init(&data->look_sleep, NULL);
+	pthread_mutex_init(&data->look_eting, NULL);
+	pthread_mutex_init(&data->look_die, NULL);
+	pthread_mutex_init(&data->look_sleep, NULL);
 	pthread_mutex_init(&data->look_write, NULL);
 	data->nphilo = ft_atoi(av[1]);
 	data->time_to_eat = ft_atoi(av[3]);
