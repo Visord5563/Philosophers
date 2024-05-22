@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/21 21:36:51 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/05/22 20:03:30 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,13 @@
 
 typedef struct s_data
 {
-	// int c;
 	pthread_t		t;
 	int				die;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	look_eting;
 	pthread_mutex_t	look_die;
-	pthread_mutex_t	look_sleep;
-	pthread_mutex_t	look_write;
-	long long 		num_meal;
+	pthread_mutex_t	look_finish;
+	int 			num_meal;
+	int 			finish_eat;
 	long long 		time_to_die;
 	long long 		time_to_eat;
 	long long 		start;
@@ -48,10 +46,10 @@ typedef struct s_data
 typedef struct s_philo
 {
 	long long 		times_last_eat;
-	// int				eat;
+	int				eat;
 	int				r_fork;
 	int				l_fork;
-	// int 			count;
+	int 			count;
 	pthread_t		thread;
 	long long 		new_time_to_die;
 	int				id;
@@ -62,9 +60,10 @@ int		ft_atoi(const char *str);
 int 	parsing(char **av);
 void	*routine(void *arg);
 long long get_time(void);
-void ft_usleep(long long time, t_philo *philos);
+void ft_usleep(long long time);
 void ft_write(char *str, t_philo *philos);
-// int check_finished(t_philo *philos, t_data *data);
+int check_finished(t_philo *philos);
 void init_data(char **av, t_data *data);
+void destroy_free(t_philo *philos);
 
 #endif
