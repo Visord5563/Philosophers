@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 15:15:00 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:18:35 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,14 @@ void exit_child(t_philo *philos)
 	i = 0;
 	while(i < philos->data->nphilo)
 	{
+		if (philos->data->num_meal != -1)
+			sem_post(philos->data->finish_eat);
 		kill(philos->data->pid[i], SIGKILL);
 		waitpid(philos->data->pid[i], NULL, 0);
 		i++;
   	}
 	destroy_free(philos);
+	
 }
 
 void	*monitoring(void *arg)

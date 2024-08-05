@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 15:11:59 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:15:05 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	parsing(char **av)
 	return (1);
 }
 
+
 int	main(int ac, char **av)
 {
 	t_data	*data;
@@ -82,7 +83,6 @@ int	main(int ac, char **av)
 
 	if (ac > 6 || ac < 5)
 		return (1);
-
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (1);

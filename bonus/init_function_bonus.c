@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 15:15:16 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:15:43 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int	creat_thread(t_philo *philos)
 	{
 		philos->data->pid[i] = fork();
 		if (philos->data->pid[i] == 0)
-		{
 			routine(&philos[i]);
-		}
 		i++;
 	}
 	sem_wait(philos->data->die);
