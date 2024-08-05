@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/23 13:51:57 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:02:38 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,17 @@ void	*routine(void *arg)
 
 	philos = (t_philo *)arg;
 	if (philos->id % 2 == 0)
-		usleep(philos->data->time_to_eat);
+		ft_usleep(50, philos);
 	while (1)
 	{
-		if (eat(philos))
+		eat(philos);
+		pthread_mutex_lock(&philos->data->look_die);
+		if(philos->data->die)
+		{
+			pthread_mutex_unlock(&philos->data->look_die);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philos->data->look_die);
 		if (philos->count == philos->data->num_meal)
 		{
 			pthread_mutex_lock(&philos->data->look_finish);
@@ -37,12 +43,17 @@ void	*routine(void *arg)
 void	*monitoring(void *arg)
 {
 	t_philo	*philos;
-
+	int i;
 	philos = (t_philo *)arg;
 	while (!philos->data->die)
 	{
-		if (check_die(philos) || check_finished(philos))
-			break ;
+		i = 0;
+		while(i < philos->data->nphilo)
+		{
+			if (check_die(&philos[i]) || check_finished(&philos[i]))
+				break ;
+			i++;
+		}
 	}
 	return (NULL);
 }
@@ -71,7 +82,8 @@ int	check_die(t_philo *philos)
 	if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 	{
 		time = get_time() - philos->data->start;
-		printf("%lld %d %s\n", time, philos->id, DIED);
+		if (!philos->data->die)
+			printf("%lld %d %s\n", time, philos->id, DIED);
 		philos->data->die = 1;
 		pthread_mutex_unlock(&philos->data->look_die);
 		return (1);
@@ -84,14 +96,14 @@ void	take_fork(t_philo *philos)
 {
 	philos->r_fork = philos->id - 1;
 	philos->l_fork = philos->id % philos->data->nphilo;
-	pthread_mutex_lock(&philos->data->fork[philos->r_fork]);
+	pthread_mutex_lock(&philos->data->fork[philos->l_fork]);
 	ft_write(TAKE_FORKS, philos);
 	if (philos->data->nphilo == 1)
 	{
-		pthread_mutex_unlock(&philos->data->fork[philos->r_fork]);
-		ft_usleep(philos->data->time_to_die * 2);
+		ft_usleep(philos->data->time_to_die+1, philos);
+		pthread_mutex_unlock(&philos->data->fork[philos->l_fork]);
 		return ;
 	}
-	pthread_mutex_lock(&philos->data->fork[philos->l_fork]);
+	pthread_mutex_lock(&philos->data->fork[philos->r_fork]);
 	ft_write(TAKE_FORKS, philos);
 }

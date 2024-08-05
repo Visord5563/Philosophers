@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/23 13:56:50 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/06/07 04:08:39 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_philo
 	int				l_fork;
 	int				count;
 	pthread_t		thread;
-	long long		new_time_to_die;
 	int				id;
 	struct s_data	*data;
 }	t_philo;
@@ -58,13 +57,13 @@ int			ft_atoi(const char *str);
 int			parsing(char **av);
 void		*routine(void *arg);
 long long	get_time(void);
-void		ft_usleep(long long time);
+void		ft_usleep(long long time, t_philo *philos);
 void		ft_write(char *str, t_philo *philos);
 int			check_finished(t_philo *philos);
 int			init_data(char **av, t_data *data);
 void		destroy_free(t_philo *philos);
 void		*monitoring(void *arg);
-int			eat(t_philo *philos);
+void			eat(t_philo *philos);
 void		ft_sleep(t_philo *philos);
 int			creat_thread(t_philo *philos);
 int			init_philos(t_philo	*philos, t_data *data);

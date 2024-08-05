@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/23 13:51:40 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/05 15:11:59 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	ft_atoi(const char *str)
 {
@@ -34,32 +34,24 @@ int	ft_atoi(const char *str)
 
 void	destroy_free(t_philo *philos)
 {
-	int	i;
-
-	i = 0;
-	if (pthread_mutex_destroy(&philos->data->look_die) != 0)
-	{
-		printf("Error destroying mutex for look_die\n");
-		return ;
-	}
-	if (pthread_mutex_destroy(&philos->data->look_finish) != 0)
-	{
-		printf("Error destroying mutex for look_finish\n");
-		return ;
-	}
-	while (i < philos->data->nphilo)
-	{
-		if (pthread_mutex_destroy(&philos->data->fork[i]) != 0)
-		{
-			printf("Error destroying mutex for fork\n");
-			return ;
-		}
-		i++;
-	}
-	free(philos->data->fork);
+	sem_post(philos->data->lock_die);
+	sem_post(philos->data->die);
+	sem_close(philos->data->fork);
+	sem_close(philos->data->lock_die);
+	sem_close(philos->data->lock_finish);
+	sem_close(philos->data->finish_eat);
+	sem_close(philos->data->die);
+	sem_unlink("/hamid");
+	sem_unlink("/die");
+	sem_unlink("/look_die");
+	sem_unlink("/finish");
+	sem_unlink("/finish_eat");
+	free(philos->data->pid);
 	free(philos->data);
 	free(philos);
+	exit(0);
 }
+
 
 int	parsing(char **av)
 {
@@ -90,6 +82,7 @@ int	main(int ac, char **av)
 
 	if (ac > 6 || ac < 5)
 		return (1);
+
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (1);
@@ -102,6 +95,6 @@ int	main(int ac, char **av)
 		return (free(data), 1);
 	if (init_philos(philos, data))
 		return (free(data), 1);
-	destroy_free(philos);
+
 	return (0);
 }

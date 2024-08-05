@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/05/23 13:44:38 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/06/07 04:03:17 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,21 @@ int	creat_thread(t_philo *philos)
 	int	i;
 
 	i = 0;
+	pthread_create(&philos->data->t, NULL, monitoring, philos);
 	while (i < philos->data->nphilo)
 	{
 		if (pthread_create(&philos[i].thread, NULL, routine, &philos[i]) != 0)
 			return (printf("Error creating thread thread\n"), 1);
 		i++;
 	}
-	if (pthread_create(&philos->data->t, NULL, monitoring, philos) != 0)
-		return (printf("Error creating thread t\n"), 1);
 	i = 0;
 	while (i < philos->data->nphilo)
 	{
-		if (pthread_join(philos[i].thread, NULL) != 0)
-			return (printf("Error joining thread\n"), 1);
+		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
-	if (pthread_detach(philos->data->t) != 0)
-		return (printf("Error detaching thread t\n"), 1);
+	pthread_detach(philos->data->t);
+
 	return (0);
 }
 
