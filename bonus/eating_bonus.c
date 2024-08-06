@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:49:57 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 10:33:36 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 13:07:24 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	eat(t_philo *philos)
 	long long	time;
 
 	take_fork(philos);
+	sem_wait(philos->data->die);
 	philos->times_last_eat = get_time();
 	philos->count++;
 	time = get_time() - philos->data->start;
 	ft_write(EATING, philos);
+	sem_post(philos->data->die);
 	ft_usleep(philos->data->time_to_eat);
 	sem_post(philos->data->fork);
 	sem_post(philos->data->fork);
@@ -47,11 +49,11 @@ void	ft_write(char *str, t_philo *philos)
 {
 	long long	time;
 
-	sem_wait(philos->data->lock_die);
+	sem_wait(philos->data->print);
 	time = get_time() - philos->data->start;
 	printf("%lld %d %s\n", time, philos->id, str);
 	if (strcmp(str, DIED))
-		sem_post(philos->data->lock_die);
+		sem_post(philos->data->print);
 }
 
 void	ft_sleep(t_philo *philos)

@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:37:26 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 12:37:13 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ typedef struct s_data
 	sem_t				*die;
 	sem_t			*fork;
 	int 			*pid;
-	sem_t		*lock_die;
-	sem_t		*lock_finish;
+	sem_t		*print;
 	int				num_meal;
-	sem_t			*finish_eat;
 	long long		time_to_die;
 	long long		time_to_eat;
 	long long		start;

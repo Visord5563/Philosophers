@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:40:11 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 13:02:20 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ int	creat_thread(t_philo *philos)
 	{
 		philos->data->pid[i] = fork();
 		if (philos->data->pid[i] == 0)
+		{
+			if(i % 2 == 0)
+				ft_usleep(philos->data->time_to_eat);
 			routine(&philos[i]);
+		}
 		i++;
 	}
 
@@ -69,37 +73,21 @@ int	init_data(char **av, t_data *data)
 		sem_unlink("/hamid");
 		return (1);
 	}
-	// sem_unlink("/finish_eat");
-	// data->finish_eat = sem_open("/finish_eat", O_CREAT , 0644,	 0);
-	// if(data->finish_eat == SEM_FAILED)
-	// {
-	// 	sem_close(data->finish_eat);
-	// 	sem_unlink("/finish_eat");
-	// 	return (1);
-	// }
-	sem_unlink("/lock_die");
-	data->lock_die = sem_open("/lock_die", O_CREAT , 0644,	 1);
-	if(data->lock_die == SEM_FAILED)
+	sem_unlink("/print");
+	data->print = sem_open("/print", O_CREAT , 0644,	 1);
+	if(data->print == SEM_FAILED)
 	{
-		sem_close(data->lock_die);
+		sem_close(data->print);
 		sem_unlink("/die");
 		return (1);
 	}
-	// sem_unlink("/lock_finish");
-	// data->lock_finish = sem_open("/lock_finish", O_CREAT , 0644,	 1);
-	// if(data->lock_finish == SEM_FAILED)
-	// {
-	// 	sem_close(data->lock_finish);
-	// 	sem_unlink("/lock_finish");
-	// 	return (1);
-	// }
-	// sem_unlink("/die");
-	// data->die = sem_open("/die", O_CREAT , 0644,	 1);
-	// if(data->die == SEM_FAILED)
-	// {
-	// 	sem_close(data->die);
-	// 	sem_unlink("/die");
-	// 	return (1);
-	// }
+	sem_unlink("/die");
+	data->die = sem_open("/die", O_CREAT , 0644,	 1);
+	if(data->die == SEM_FAILED)
+	{
+		sem_close(data->die);
+		sem_unlink("/die");
+		return (1);
+	}
 	return (0);
 }
