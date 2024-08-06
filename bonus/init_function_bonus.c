@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:15:43 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:23:20 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	creat_thread(t_philo *philos)
 	i = 0;
 	if(philos->data->num_meal != -1)
 	{
+		printf("num_meal = %d\n", philos->data->num_meal);
 		pthread_create(&philos->data->thread, NULL, check_finished, philos);
 		pthread_detach(philos->data->thread);
 	}
@@ -27,6 +28,11 @@ int	creat_thread(t_philo *philos)
 	while (i < philos->data->nphilo)
 	{
 		philos->data->pid[i] = fork();
+		if(philos->data->pid[i] < 0)
+		{
+			perror("fork");
+			exit(1);
+		}
 		if (philos->data->pid[i] == 0)
 			routine(&philos[i]);
 		i++;

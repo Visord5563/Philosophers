@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:15:05 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:18:19 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	main(int ac, char **av)
 	t_data	*data;
 	t_philo	*philos;
 
+	printf("ttyname%s\n", ttyname(0));
 	if (ac > 6 || ac < 5)
 		return (1);
 	data = malloc(sizeof(t_data));

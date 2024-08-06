@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:18:35 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:25:42 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,8 @@ void	*check_finished(void *arg)
 	i = -1;
 	philos = (t_philo *)arg;
 	while(++i < philos->data->nphilo)
-	{
 		sem_wait(philos->data->finish_eat);
-	}
-	sem_post(philos->data->lock_die);
+	sem_post(philos->data->die);
 	return (NULL);
 }
 
