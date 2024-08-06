@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/06/07 03:32:23 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:12:55 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	destroy_free(t_philo *philos)
 	int	i;
 
 	i = 0;
-	pthread_mutex_destroy(&philos->data->look_die);
-	pthread_mutex_destroy(&philos->data->look_finish);
+	pthread_mutex_destroy(&philos->data->lock_die);
+	pthread_mutex_destroy(&philos->data->lock_finish);
 	while (i < philos->data->nphilo)
 	{
 		pthread_mutex_destroy(&philos->data->fork[i]);

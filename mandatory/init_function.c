@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/06/07 04:03:17 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:13:59 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int	init_philos(t_philo	*philos, t_data *data)
 
 int	init_data(char **av, t_data *data)
 {
-	if (pthread_mutex_init(&data->look_die, NULL) != 0)
+	if (pthread_mutex_init(&data->lock_die, NULL) != 0)
 		return (printf("Error initializing mutex for look_die\n"), 1);
-	if (pthread_mutex_init(&data->look_finish, NULL) != 0)
+	if (pthread_mutex_init(&data->lock_finish, NULL) != 0)
 		return (printf("Error initializing mutex for look_finish\n"), 1);
 	data->nphilo = ft_atoi(av[1]);
 	data->time_to_eat = ft_atoi(av[3]);

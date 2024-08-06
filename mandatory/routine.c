@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/06/12 14:02:38 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:28:50 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	*routine(void *arg)
 	while (1)
 	{
 		eat(philos);
-		pthread_mutex_lock(&philos->data->look_die);
+		pthread_mutex_lock(&philos->data->lock_die);
 		if(philos->data->die)
 		{
-			pthread_mutex_unlock(&philos->data->look_die);
+			pthread_mutex_unlock(&philos->data->lock_die);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&philos->data->look_die);
+		pthread_mutex_unlock(&philos->data->lock_die);
 		if (philos->count == philos->data->num_meal)
 		{
-			pthread_mutex_lock(&philos->data->look_finish);
+			pthread_mutex_lock(&philos->data->lock_finish);
 			philos->data->finish_eat++;
-			pthread_mutex_unlock(&philos->data->look_finish);
+			pthread_mutex_unlock(&philos->data->lock_finish);
 		}
 		ft_sleep(philos);
 	}
@@ -60,17 +60,17 @@ void	*monitoring(void *arg)
 
 int	check_finished(t_philo *philos)
 {
-	pthread_mutex_lock(&philos->data->look_die);
-	pthread_mutex_lock(&philos->data->look_finish);
+	pthread_mutex_lock(&philos->data->lock_die);
+	pthread_mutex_lock(&philos->data->lock_finish);
 	if (philos->data->finish_eat == philos->data->nphilo)
 	{
 		philos->data->die = 1;
-		pthread_mutex_unlock(&philos->data->look_die);
-		pthread_mutex_unlock(&philos->data->look_finish);
+		pthread_mutex_unlock(&philos->data->lock_die);
+		pthread_mutex_unlock(&philos->data->lock_finish);
 		return (1);
 	}
-	pthread_mutex_unlock(&philos->data->look_die);
-	pthread_mutex_unlock(&philos->data->look_finish);
+	pthread_mutex_unlock(&philos->data->lock_die);
+	pthread_mutex_unlock(&philos->data->lock_finish);
 	return (0);
 }
 
@@ -78,17 +78,17 @@ int	check_die(t_philo *philos)
 {
 	long long	time;
 
-	pthread_mutex_lock(&philos->data->look_die);
+	pthread_mutex_lock(&philos->data->lock_die);
 	if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 	{
 		time = get_time() - philos->data->start;
 		if (!philos->data->die)
 			printf("%lld %d %s\n", time, philos->id, DIED);
 		philos->data->die = 1;
-		pthread_mutex_unlock(&philos->data->look_die);
+		pthread_mutex_unlock(&philos->data->lock_die);
 		return (1);
 	}
-	pthread_mutex_unlock(&philos->data->look_die);
+	pthread_mutex_unlock(&philos->data->lock_die);
 	return (0);
 }
 

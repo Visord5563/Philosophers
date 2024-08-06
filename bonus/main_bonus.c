@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 08:55:49 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:46:28 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int	ft_atoi(const char *str)
 void	destroy_free(t_philo *philos)
 {
 	sem_post(philos->data->lock_die);
-	sem_post(philos->data->die);
+	// sem_post(philos->data->die);
 	sem_close(philos->data->fork);
 	sem_close(philos->data->lock_die);
-	sem_close(philos->data->lock_finish);
-	sem_close(philos->data->finish_eat);
-	sem_close(philos->data->die);
+	// sem_close(philos->data->lock_finish);
+	// sem_close(philos->data->finish_eat);
+	// sem_close(philos->data->die);
 	sem_unlink("/hamid");
 	sem_unlink("/die");
 	sem_unlink("/look_die");
@@ -75,6 +75,30 @@ int	parsing(char **av)
 	return (1);
 }
 
+void waitfpid(t_philo *philos)
+{
+	int	i;
+	int	j;
+	int	status;
+
+	i = 0;
+	j = 0;
+
+	while (i < philos->data->nphilo)
+	{
+		waitpid(philos->data->pid[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			j = 0;
+			while(j < philos->data->nphilo)
+				kill(philos->data->pid[j++], SIGKILL);
+		}
+		i++;
+	}
+	exit_child(philos);
+
+	destroy_free(philos);
+}
 
 int	main(int ac, char **av)
 {
@@ -95,6 +119,6 @@ int	main(int ac, char **av)
 		return (free(data), 1);
 	if (init_philos(philos, data))
 		return (free(data), 1);
-
+	waitfpid(philos);
 	return (0);
 }

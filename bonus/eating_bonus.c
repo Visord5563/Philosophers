@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:49:57 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:05:48 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:33:36 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	ft_write(char *str, t_philo *philos)
 	sem_wait(philos->data->lock_die);
 	time = get_time() - philos->data->start;
 	printf("%lld %d %s\n", time, philos->id, str);
-	sem_post(philos->data->lock_die);
+	if (strcmp(str, DIED))
+		sem_post(philos->data->lock_die);
 }
 
 void	ft_sleep(t_philo *philos)

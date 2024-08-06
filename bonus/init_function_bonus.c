@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 08:23:20 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:40:11 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,17 @@ int	creat_thread(t_philo *philos)
 	int	i;
 
 	i = 0;
-	if(philos->data->num_meal != -1)
-	{
-		printf("num_meal = %d\n", philos->data->num_meal);
-		pthread_create(&philos->data->thread, NULL, check_finished, philos);
-		pthread_detach(philos->data->thread);
-	}
 	philos->data->pid = malloc(sizeof(int) * philos->data->nphilo);
-	sem_wait(philos->data->die);
+	if (!philos->data->pid)
+		exit(1);
 	while (i < philos->data->nphilo)
 	{
 		philos->data->pid[i] = fork();
-		if(philos->data->pid[i] < 0)
-		{
-			perror("fork");
-			exit(1);
-		}
 		if (philos->data->pid[i] == 0)
 			routine(&philos[i]);
 		i++;
 	}
-	sem_wait(philos->data->die);
-	exit_child(philos);
-	i = -1;
-	while (++i < philos->data->nphilo)
-		waitpid(i, NULL, 0);
+
 	return (0);
 }
 
@@ -83,14 +69,14 @@ int	init_data(char **av, t_data *data)
 		sem_unlink("/hamid");
 		return (1);
 	}
-	sem_unlink("/finish_eat");
-	data->finish_eat = sem_open("/finish_eat", O_CREAT , 0644,	 0);
-	if(data->finish_eat == SEM_FAILED)
-	{
-		sem_close(data->finish_eat);
-		sem_unlink("/finish_eat");
-		return (1);
-	}
+	// sem_unlink("/finish_eat");
+	// data->finish_eat = sem_open("/finish_eat", O_CREAT , 0644,	 0);
+	// if(data->finish_eat == SEM_FAILED)
+	// {
+	// 	sem_close(data->finish_eat);
+	// 	sem_unlink("/finish_eat");
+	// 	return (1);
+	// }
 	sem_unlink("/lock_die");
 	data->lock_die = sem_open("/lock_die", O_CREAT , 0644,	 1);
 	if(data->lock_die == SEM_FAILED)
@@ -99,21 +85,21 @@ int	init_data(char **av, t_data *data)
 		sem_unlink("/die");
 		return (1);
 	}
-	sem_unlink("/lock_finish");
-	data->lock_finish = sem_open("/lock_finish", O_CREAT , 0644,	 1);
-	if(data->lock_finish == SEM_FAILED)
-	{
-		sem_close(data->lock_finish);
-		sem_unlink("/lock_finish");
-		return (1);
-	}
-	sem_unlink("/die");
-	data->die = sem_open("/die", O_CREAT , 0644,	 1);
-	if(data->die == SEM_FAILED)
-	{
-		sem_close(data->die);
-		sem_unlink("/die");
-		return (1);
-	}
+	// sem_unlink("/lock_finish");
+	// data->lock_finish = sem_open("/lock_finish", O_CREAT , 0644,	 1);
+	// if(data->lock_finish == SEM_FAILED)
+	// {
+	// 	sem_close(data->lock_finish);
+	// 	sem_unlink("/lock_finish");
+	// 	return (1);
+	// }
+	// sem_unlink("/die");
+	// data->die = sem_open("/die", O_CREAT , 0644,	 1);
+	// if(data->die == SEM_FAILED)
+	// {
+	// 	sem_close(data->die);
+	// 	sem_unlink("/die");
+	// 	return (1);
+	// }
 	return (0);
 }

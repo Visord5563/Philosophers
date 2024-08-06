@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:49:57 by saharchi          #+#    #+#             */
-/*   Updated: 2024/06/07 04:08:19 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 11:13:41 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	eat(t_philo *philos)
 	long long	time;
 
 	take_fork(philos);
-	pthread_mutex_lock(&philos->data->look_die);
+	pthread_mutex_lock(&philos->data->lock_die);
 	philos->times_last_eat = get_time();
 	philos->count++;
 	time = philos->times_last_eat - philos->data->start;
 	if (!philos->data->die)
 		printf("%lld %d %s\n", time, philos->id, EATING);
-	pthread_mutex_unlock(&philos->data->look_die);
+	pthread_mutex_unlock(&philos->data->lock_die);
 	ft_usleep(philos->data->time_to_eat, philos);
 	pthread_mutex_unlock(&philos->data->fork[philos->l_fork]);
 	pthread_mutex_unlock(&philos->data->fork[philos->r_fork]);
@@ -44,13 +44,13 @@ void	ft_usleep(long long time, t_philo *philos)
 	start = get_time();
 	while (get_time() - start < time)
 	{
-		pthread_mutex_lock(&philos->data->look_die);
+		pthread_mutex_lock(&philos->data->lock_die);
 		if (philos->data->die)
 		{
-			pthread_mutex_unlock(&philos->data->look_die);
+			pthread_mutex_unlock(&philos->data->lock_die);
 			return ;	
 		}
-		pthread_mutex_unlock(&philos->data->look_die);
+		pthread_mutex_unlock(&philos->data->lock_die);
 		usleep(100);
 	}
 }
@@ -59,11 +59,11 @@ void	ft_write(char *str, t_philo *philos)
 {
 	long long	time;
 
-	pthread_mutex_lock(&philos->data->look_die);
+	pthread_mutex_lock(&philos->data->lock_die);
 	time = get_time() - philos->data->start;
 	if (!philos->data->die)
 		printf("%lld %d %s\n", time, philos->id, str);
-	pthread_mutex_unlock(&philos->data->look_die);
+	pthread_mutex_unlock(&philos->data->lock_die);
 }
 
 void	ft_sleep(t_philo *philos)
