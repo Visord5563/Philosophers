@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 12:37:13 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:55:12 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ typedef struct s_data
 {
 	pthread_t		thread;
 	sem_t				*die;
+	sem_t				*lock_die;
 	sem_t			*fork;
 	int 			*pid;
-	sem_t		*print;
+	sem_t			*print;
 	int				num_meal;
 	long long		time_to_die;
 	long long		time_to_eat;

@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 13:07:18 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:07:08 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	*routine(void *arg)
 		printf("Error creating thread\n");
 		exit(1);
 	}
+	// pthread_detach(philos->t);
 	while (1)
 	{
 		eat(philos);
@@ -43,7 +44,10 @@ void	*monitoring(void *arg)
 	{
 		sem_wait(philos->data->die);
 		if (philos->count == philos->data->num_meal)
+		{
+			sem_post(philos->data->die);
 			return (NULL);
+		}
 		if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 		{
 			ft_write(DIED, philos);
