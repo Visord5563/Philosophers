@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 16:08:55 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:54:23 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ void	destroy_free(t_philo *philos)
 	sem_close(philos->data->fork);
 	sem_close(philos->data->print);
 	sem_close(philos->data->die);
+	sem_close(philos->data->lock_die);
 	sem_unlink("/fork");
 	sem_unlink("/die");
+	sem_unlink("/lock_die");
 	sem_unlink("/print");
 	free(philos->data->pid);
 	free(philos->data);
 	free(philos);
-	// exit(0);
 }
 
 
@@ -78,7 +79,7 @@ void waitfpid(t_philo *philos)
 	while (i < philos->data->nphilo)
 	{
 		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
+		if (WIFEXITED(status) && WEXITSTATUS(status))
 		{
 			i = 0;
 			while(i < philos->data->nphilo)

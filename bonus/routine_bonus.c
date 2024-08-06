@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 16:07:08 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:50:55 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	*routine(void *arg)
 		printf("Error creating thread\n");
 		exit(1);
 	}
-	// pthread_detach(philos->t);
 	while (1)
 	{
 		eat(philos);
@@ -50,8 +49,8 @@ void	*monitoring(void *arg)
 		}
 		if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 		{
+			sem_wait(philos->data->lock_die);
 			ft_write(DIED, philos);
-			sem_post(philos->data->die);
 			exit(1);
 		}
 		sem_post(philos->data->die);
@@ -64,11 +63,11 @@ void	take_fork(t_philo *philos)
 {
 	sem_wait(philos->data->fork);
 	ft_write(TAKE_FORKS, philos);
-	if (philos->data->nphilo == 1)
-	{
-		ft_usleep(philos->data->time_to_die * 2);
-		sem_post(philos->data->fork);
-	}
+	// if (philos->data->nphilo == 1)
+	// {
+	// 	ft_usleep(philos->data->time_to_die * 2);
+	// 	sem_post(philos->data->fork);
+	// }
 	sem_wait(philos->data->fork);
 	ft_write(TAKE_FORKS, philos);
 }

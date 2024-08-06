@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 14:55:32 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:51:21 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ int	init_data(char **av, t_data *data)
 	data->fork = sem_open("/fork", O_CREAT ,	 data->nphilo);
 	data->print = sem_open("/print", O_CREAT ,	 1);
 	data->die = sem_open("/die", O_CREAT ,	 1);
-	data->die = sem_open("/lock_die", O_CREAT ,	 1);
+	data->lock_die = sem_open("/lock_die", O_CREAT , 0644,	 1);
 	return (0);
 }
