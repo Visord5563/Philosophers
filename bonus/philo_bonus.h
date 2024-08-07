@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/07 14:36:36 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:57:03 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 
 typedef struct s_data
 {
-	pthread_t		thread;
 	sem_t			*die;
 	sem_t			*fork;
 	int				*pid;
