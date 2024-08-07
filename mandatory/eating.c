@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:49:57 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:13:41 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:11:36 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_usleep(long long time, t_philo *philos)
 		if (philos->data->die)
 		{
 			pthread_mutex_unlock(&philos->data->lock_die);
-			return ;	
+			return ;
 		}
 		pthread_mutex_unlock(&philos->data->lock_die);
 		usleep(100);

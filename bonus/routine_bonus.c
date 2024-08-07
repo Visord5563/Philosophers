@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:50:55 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:39:33 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ void	*routine(void *arg)
 	t_philo	*philos;
 
 	philos = (t_philo *)arg;
-	if(pthread_create(&philos->t, NULL, monitoring, philos) != 0)
+	if (pthread_create(&philos->t, NULL, monitoring, philos) != 0)
 	{
 		printf("Error creating thread\n");
 		exit(1);
 	}
+	pthread_detach(philos->t);
 	while (1)
 	{
 		eat(philos);
@@ -29,16 +30,42 @@ void	*routine(void *arg)
 			break ;
 		ft_sleep(philos);
 	}
-	pthread_join(philos->t, NULL);
 	exit(0);
 }
 
+void	printerror(t_data *data)
+{
+	if (data->fork == SEM_FAILED)
+	{
+		sem_close(data->fork);
+		sem_unlink("/fork");
+	}
+	else if (data->die == SEM_FAILED)
+	{
+		sem_close(data->fork);
+		sem_unlink("/fork");
+		sem_close(data->print);
+		sem_unlink("/print");
+		sem_close(data->die);
+		sem_unlink("/die");
+	}
+	else if (data->print == SEM_FAILED)
+	{
+		sem_close(data->fork);
+		sem_unlink("/fork");
+		sem_close(data->print);
+		sem_unlink("/print");
+	}
+	printf("Error: sem_open failed\n");
+	free(data);
+	exit(1);
+}
 
 void	*monitoring(void *arg)
 {
 	t_philo	*philos;
-	philos = (t_philo *)arg;
 
+	philos = (t_philo *)arg;
 	while (1)
 	{
 		sem_wait(philos->data->die);
@@ -49,7 +76,6 @@ void	*monitoring(void *arg)
 		}
 		if (get_time() - philos->times_last_eat > philos->data->time_to_die)
 		{
-			sem_wait(philos->data->lock_die);
 			ft_write(DIED, philos);
 			exit(1);
 		}
@@ -57,17 +83,20 @@ void	*monitoring(void *arg)
 	}
 }
 
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
 
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
 
 void	take_fork(t_philo *philos)
 {
 	sem_wait(philos->data->fork);
 	ft_write(TAKE_FORKS, philos);
-	// if (philos->data->nphilo == 1)
-	// {
-	// 	ft_usleep(philos->data->time_to_die * 2);
-	// 	sem_post(philos->data->fork);
-	// }
 	sem_wait(philos->data->fork);
 	ft_write(TAKE_FORKS, philos);
 }

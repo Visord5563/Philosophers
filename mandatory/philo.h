@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:12:40 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:12:31 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int			check_finished(t_philo *philos);
 int			init_data(char **av, t_data *data);
 void		destroy_free(t_philo *philos);
 void		*monitoring(void *arg);
-void			eat(t_philo *philos);
+void		eat(t_philo *philos);
 void		ft_sleep(t_philo *philos);
 int			creat_thread(t_philo *philos);
 int			init_philos(t_philo	*philos, t_data *data);

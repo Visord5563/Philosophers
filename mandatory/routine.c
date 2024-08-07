@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:45:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:28:50 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:14:58 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*routine(void *arg)
 	{
 		eat(philos);
 		pthread_mutex_lock(&philos->data->lock_die);
-		if(philos->data->die)
+		if (philos->data->die)
 		{
 			pthread_mutex_unlock(&philos->data->lock_die);
 			return (NULL);
@@ -43,12 +43,13 @@ void	*routine(void *arg)
 void	*monitoring(void *arg)
 {
 	t_philo	*philos;
-	int i;
+	int		i;
+
 	philos = (t_philo *)arg;
 	while (!philos->data->die)
 	{
 		i = 0;
-		while(i < philos->data->nphilo)
+		while (i < philos->data->nphilo)
 		{
 			if (check_die(&philos[i]) || check_finished(&philos[i]))
 				break ;
@@ -100,7 +101,7 @@ void	take_fork(t_philo *philos)
 	ft_write(TAKE_FORKS, philos);
 	if (philos->data->nphilo == 1)
 	{
-		ft_usleep(philos->data->time_to_die+1, philos);
+		ft_usleep(philos->data->time_to_die + 1, philos);
 		pthread_mutex_unlock(&philos->data->fork[philos->l_fork]);
 		return ;
 	}

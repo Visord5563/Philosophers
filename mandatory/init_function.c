@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 11:13:59 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:12:08 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	creat_thread(t_philo *philos)
 		i++;
 	}
 	pthread_detach(philos->data->t);
-
 	return (0);
 }
 

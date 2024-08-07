@@ -6,7 +6,7 @@
 #    By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/29 10:53:22 by saharchi          #+#    #+#              #
-#    Updated: 2024/07/13 14:54:48 by saharchi         ###   ########.fr        #
+#    Updated: 2024/08/07 14:17:16 by saharchi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo
 
 NAMEB = philo_bonus
 
-CFLAGS =  -Wall -Wextra -Werror #-g -fsanitize=thread
+CFLAGS =  -Wall -Wextra -Werror 
 RM = rm -f
 
 SRC = mandatory/main.c mandatory/routine.c mandatory/init_function.c mandatory/eating.c

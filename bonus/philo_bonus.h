@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:53:48 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:47:52 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:36:36 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@
 typedef struct s_data
 {
 	pthread_t		thread;
-	sem_t				*die;
-	sem_t				*lock_die;
+	sem_t			*die;
 	sem_t			*fork;
-	int 			*pid;
+	int				*pid;
 	sem_t			*print;
 	int				num_meal;
 	long long		time_to_die;
@@ -60,16 +59,15 @@ void		*routine(void *arg);
 long long	get_time(void);
 void		ft_usleep(long long time);
 void		ft_write(char *str, t_philo *philos);
-void		*check_finished(void *arg);
-int			init_data(char **av, t_data *data);
+void		init_data(char **av, t_data *data);
 void		destroy_free(t_philo *philos);
 void		*monitoring(void *arg);
-void			eat(t_philo *philos);
+void		eat(t_philo *philos);
 void		ft_sleep(t_philo *philos);
-int			creat_thread(t_philo *philos);
-int			init_philos(t_philo	*philos, t_data *data);
-int			check_die(t_philo *philos);
+void		creat_thread(t_philo *philos);
+void		init_philos(t_philo	*philos, t_data *data);
 void		take_fork(t_philo *philos);
-void		exit_child(t_philo *philos);
+int			ft_strcmp(const char *s1, const char *s2);
+void		printerror(t_data *data);
 
 #endif

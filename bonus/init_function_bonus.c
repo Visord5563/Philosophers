@@ -6,13 +6,13 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 13:42:43 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:51:21 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:36:18 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	creat_thread(t_philo *philos)
+void	creat_thread(t_philo *philos)
 {
 	int	i;
 
@@ -25,22 +25,19 @@ int	creat_thread(t_philo *philos)
 		philos->data->pid[i] = fork();
 		if (philos->data->pid[i] == 0)
 		{
-			if(i % 2 == 0)
+			if (philos->id % 2 == 0)
 				ft_usleep(philos->data->time_to_eat);
 			routine(&philos[i]);
 		}
 		i++;
 	}
-
-	return (0);
 }
 
-int	init_philos(t_philo	*philos, t_data *data)
+void	init_philos(t_philo	*philos, t_data *data)
 {
 	int	i;
 
 	i = 0;
-
 	while (i < data->nphilo)
 	{
 		philos[i].id = i + 1;
@@ -50,12 +47,10 @@ int	init_philos(t_philo	*philos, t_data *data)
 		philos[i].times_last_eat = get_time();
 		i++;
 	}
-	if (creat_thread(philos))
-		return (1);
-	return (0);
+	creat_thread(philos);
 }
 
-int	init_data(char **av, t_data *data)
+void	init_data(char **av, t_data *data)
 {
 	data->nphilo = ft_atoi(av[1]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -68,10 +63,13 @@ int	init_data(char **av, t_data *data)
 	sem_unlink("/fork");
 	sem_unlink("/print");
 	sem_unlink("/die");
-	sem_unlink("/lock_die");
-	data->fork = sem_open("/fork", O_CREAT ,	 data->nphilo);
-	data->print = sem_open("/print", O_CREAT ,	 1);
-	data->die = sem_open("/die", O_CREAT ,	 1);
-	data->lock_die = sem_open("/lock_die", O_CREAT , 0644,	 1);
-	return (0);
+	data->fork = sem_open("/fork", O_CREAT, 0644, data->nphilo);
+	if (data->fork == SEM_FAILED)
+		printerror(data);
+	data->print = sem_open("/print", O_CREAT, 0644, 1);
+	if (data->print == SEM_FAILED)
+		printerror(data);
+	data->die = sem_open("/die", O_CREAT, 0644, 1);
+	if (data->die == SEM_FAILED)
+		printerror(data);
 }

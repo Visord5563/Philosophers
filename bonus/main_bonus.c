@@ -6,7 +6,7 @@
 /*   By: saharchi <saharchi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 10:54:29 by saharchi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:54:23 by saharchi         ###   ########.fr       */
+/*   Updated: 2024/08/07 14:29:35 by saharchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,13 @@ void	destroy_free(t_philo *philos)
 	sem_close(philos->data->fork);
 	sem_close(philos->data->print);
 	sem_close(philos->data->die);
-	sem_close(philos->data->lock_die);
 	sem_unlink("/fork");
 	sem_unlink("/die");
-	sem_unlink("/lock_die");
 	sem_unlink("/print");
 	free(philos->data->pid);
 	free(philos->data);
 	free(philos);
 }
-
 
 int	parsing(char **av)
 {
@@ -70,7 +67,7 @@ int	parsing(char **av)
 	return (1);
 }
 
-void waitfpid(t_philo *philos)
+void	waitfpid(t_philo *philos)
 {
 	int	i;
 	int	status;
@@ -82,7 +79,7 @@ void waitfpid(t_philo *philos)
 		if (WIFEXITED(status) && WEXITSTATUS(status))
 		{
 			i = 0;
-			while(i < philos->data->nphilo)
+			while (i < philos->data->nphilo)
 				kill(philos->data->pid[i++], SIGKILL);
 			break ;
 		}
@@ -100,16 +97,17 @@ int	main(int ac, char **av)
 		return (1);
 	data = malloc(sizeof(t_data));
 	if (!data)
-		return (1);
+		exit(1);
 	if (parsing(av) == 0)
 		return (printf("wrong\n"), free(data), 1);
-	if (init_data(av, data))
-		return (free(data), 1);
+	init_data(av, data);
 	philos = malloc(sizeof(t_philo) * data->nphilo);
 	if (!philos)
-		return (free(data), 1);
-	if (init_philos(philos, data))
-		return (free(data), 1);
+	{
+		free(data);
+		exit(1);
+	}
+	init_philos(philos, data);
 	waitfpid(philos);
 	return (0);
 }
